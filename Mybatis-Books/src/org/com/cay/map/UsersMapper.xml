@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org/com/cay/interfaces/IUsersMapper">
+	<select id="findUsersById" parameterType="int" resultType="Users">
+		select * from users where uid=#{uid}
+	</select>
+
+	<insert id="insertUsers" parameterType="Users">
+		<selectKey keyProperty="uid" resultType="int"></selectKey>
+		insert into	users(username,password) values(#{username},#{password})
+	</insert>
+	
+	<update id="updateUsers" parameterType="map"><!-- map对应于java.util.Map -->
+		update users set username=#{username} where uid=#{uid}
+	</update>
+	
+	<delete id="deleteUsers" parameterType="int">
+		delete from users where uid=#{uid}
+	</delete>
+	
+	<resultMap type="Users" id="users">
+		<!-- <id column="uid" property="uid" javaType="int"/> -->
+		<result column="username" property="username" javaType="java.lang.String"/>
+		<result column="password" property="password" javaType="java.lang.String"/>
+	</resultMap>
+	<select id="findAll" resultMap="users">
+		select * from users
+	</select>
+</mapper>

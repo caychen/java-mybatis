@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration  
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+ <configuration>
+ 
+ 	<!-- 加载外部配置文件 -->
+ 	<properties resource="db.properties"></properties>
+ 	
+ 	<typeAliases>
+ 		<typeAlias type="org.com.cay.entity.Teacher" alias="_Teacher"/>
+ 		<typeAlias type="org.com.cay.entity.Classes" alias="_Classes"/>
+ 	</typeAliases>
+ 	<!-- 对事务的管理和连接池的配置 -->  
+ 	<!-- 
+ 		development:开发模式，
+ 		work:工作模式，发布的时候需要使用work
+ 	 -->
+	<environments default="development">
+		<environment id="development"><!-- 多个 -->
+		<!-- 
+			MyBatis 中有两种事务管理器类型:JDBC和MANAGED
+		 -->
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+				<property name="driver.encoding" value="${driver.encoding}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="org/com/cay/mapper/ClassesMapper.xml"/>
+	</mappers>
+ </configuration>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper  
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.com.cay.mapper.UserMapper">
+	<!-- 根据id查询得到一个user对象 -->
+	<select id="getUser" parameterType="int" resultType="_User">
+		select * from user where id = #{id}
+	</select>
+	
+	<insert id="addUser" parameterType="_User">
+		<!-- values中的值必须是parameterType类中的属性名 -->
+		insert into user(name, age) values(#{name},#{age})
+	</insert>
+	
+	<delete id="deleteUser" parameterType="int">
+		delete from user where id = #{id}
+	</delete>
+	
+	<update id="updateUser" parameterType="_User">
+		update user set name = #{name}, age = #{age} where id = #{id}
+	</update>
+	
+	
+	<select id="getAllUsers" resultType="_User">
+		select * from user
+	</select>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.com.cay.mapper.ClassesMapper">
+	<!-- 
+		需求：根据班级 id 查询班级信息(带老师的信息)
+	 -->
+	<!--
+		方式一： 嵌套结果：使用嵌套结果映射来处理重复的联合结果的子集
+		封装联表查询的数据(去除重复的数据)
+		select * from class c, teacher t where c.teacher_id=t.t_id and c.c_id=1
+	-->
+	<resultMap type="_Classes" id="getClasses1Map">
+		<id property="id" column="c_id"/>
+		<result property="name" column="c_name"/>
+		<!-- 用查询到的数据来封装Classes类的Teacher属性 -->
+		<association property="teacher" javaType="_Teacher">
+			<id property="id" column="t_id"/>
+			<result property="name" column="t_name"/>
+		</association>
+	</resultMap>
+	<select id="getClasses1" parameterType="int" resultMap="getClasses1Map">
+		select * from class c, teacher t where c.teacher_id=t.t_id and c.c_id=1
+	</select>
+	
+	<!--
+		方式二： 嵌套查询：通过执行另外一个 SQL 映射语句来返回预期的复杂类型
+		SELECT * FROM class WHERE c_id=1;
+		SELECT * FROM teacher WHERE t_id=1 //1 是上一个查询得到的 teacher_id 的值
+	-->
+	<resultMap type="_Classes" id="getClasses2Map">
+		<id property="id" column="c_id"/>
+		<result property="name" column="c_name"/>
+		
+		<!-- 此处的column表示将之前查询到的结果中的该字段值作为select属性的参数 
+			association:用于一对一的关联查询
+			select:使用另一个查询封装作为结果
+			column:使用之前查询到的结果中的该字段作为select参数
+		-->
+		<association property="teacher" select="getTeacher" column="teacher_id"></association>
+	</resultMap>
+	<select id="getTeacher" parameterType="int" resultType="_Teacher">
+		select t_id id, t_name name from teacher where t_id=#{id}
+	</select>
+	<select id="getClasses2" parameterType="int" resultMap="getClasses2Map">
+		select * from class where c_id=#{id}
+	</select>
+</mapper>

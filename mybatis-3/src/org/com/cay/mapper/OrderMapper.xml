@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.com.cay.mapper.OrderMapper">
+	<select id="getOrder1" parameterType="int" resultType="_Order">
+		select * from order_table where order_id=#{id}
+	</select>
+	
+	<!-- 通过在sql查询语句中使用别名 -->
+	<select id="getOrder2" parameterType="int" resultType="_Order">
+		select order_id orderId, order_no orderNo, order_price orderPrice from order_table where order_id=#{id}
+	</select>
+	
+	<!-- resultMap：用来封装类属性与数据库表列之间的映射关系 
+		id:用来封装主键
+		result：用来封装主键之外的字段
+	-->
+	<resultMap type="org.com.cay.entity.Order" id="Order2Map">
+		<id property="orderId" column="order_id"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="orderPrice" column="order_price"/>
+	</resultMap>
+	
+	<select id="getOrder3" parameterType="int" resultMap="Order2Map">
+		select * from order_table where order_id=#{id}
+	</select>
+</mapper>
